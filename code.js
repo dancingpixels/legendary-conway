@@ -2,9 +2,12 @@
 let rows = 24;
 let cols = 24;
 
+let playing = false;
+
 // intialize
 function initialize() {
 	createGrid();
+	setUpControlButtons();
 }
 
 // board layout
@@ -25,6 +28,7 @@ function createGrid() {
 		
 			//  set the proper css class
 			cell.setAttribute("class", "dead");
+			cell.onclick = cellClickHandler;
 			tr.appendChild(cell);
 		}
 		table.appendChild(tr)
@@ -32,4 +36,55 @@ function createGrid() {
 	gridContainer.appendChild(table);
 }
 
+// click handler
+function cellClickHandler () {
+	let classes = this.getAttribute("class");
+	//  Check to see if the string of attributes contains `live`
+	if (classes.indexOf("live") > -1) {
+		this.setAttribute("class", "dead");
+	} else {
+		this.setAttribute("class", "live");
+	}
+}
+
+////////////////////////////////////
+//       Event Handlers           //
+////////////////////////////////////
+
+function setUpControlButtons () {
+	let start = document.getElementById("start");
+	start.onclick = startButtonHandler;
+
+	let clear = document.getElementById("clear");
+	clear.onclick = clearButtonHandler;
+}
+
+function startButtonHandler() {
+	if (playing) {
+		console.log("Pause the game.");
+		playing = false;
+		this.innerHTML = "continue";
+	} else {
+		console.log("Continue the game.");
+		playing = true;
+		this.innerHTML = "pause";
+		play();
+	}
+	
+}
+
+function clearButtonHandler() {
+	console.log("Clear the game: stop playing, clear the grid");
+	playing = false;
+	let start = document.getElementById("start");
+	start.innerHTML = "start";
+
+}
+
+
+function play () {
+	console.log("Play the game.")
+}
+
 window.onload = initialize;
+
