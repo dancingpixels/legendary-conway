@@ -1,6 +1,6 @@
 // defining the rows and columns of the grid 24 x 24
-const rows = 24;
-const  cols = 24;
+const rows = 50;
+const  cols = 100;
 
 // game state
 let playing = false;
@@ -28,7 +28,6 @@ function resetGrids() {
 		}
 	}
 }
-
 
 
 function copyAndResetGrid() {
@@ -108,11 +107,17 @@ function updateView() {
 
 // Event Handlers
 function setUpControlButtons () {
+	// start button
 	let start = document.getElementById("start");
 	start.onclick = startButtonHandler;
 
+    // clear buttons
 	let clear = document.getElementById("clear");
 	clear.onclick = clearButtonHandler;
+
+	// random buttom to set initial grid state
+	let randomButton = document.getElementById("random")
+	randomButton.onclick = randomButtonHandler;
 }
 
 
@@ -136,6 +141,33 @@ function clearButtonHandler() {
     playing = false;
     let start= document.getElementById("start");
     start.innerHTML = "start";
+
+    clearTimeout(timer);
+
+    let cellList = document.getElementsByClassName("live");
+    let cells = []
+    for (let i=0; i < cellList.length; i++) {
+    	cells.push(cellList[i]);
+    }
+    for (let i=0; i < cells.length; i++) {
+    	cells[i].setAttribute("class", "dead");
+    }
+    resetGrids();
+}
+
+function randomButtonHandler() {
+    if (playing) return;
+    clearButtonHandler();
+    for (var i = 0; i < rows; i++) {
+        for (var j = 0; j < cols; j++) {
+            var isLive = Math.round(Math.random());
+            if (isLive == 1) {
+                var cell = document.getElementById(i + "_" + j);
+                cell.setAttribute("class", "live");
+                grid[i][j] = 1;
+            }
+        }
+    }
 }
 
 
@@ -186,6 +218,7 @@ function applyRules(row, col) {
     }
 }
 
+
 function countNeighbors(row, col) {
      count = 0;
     if (row-1 >= 0) {
@@ -214,7 +247,6 @@ function countNeighbors(row, col) {
     }
     return count;
 }
-
 
 window.onload = initialize;
 
